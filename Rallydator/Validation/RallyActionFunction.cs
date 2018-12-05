@@ -49,7 +49,11 @@ namespace Rallydator.Validation
                         var nextSpace = connectedSpace;
                         if (connectedSpace.IsJump)
                         {
-                            if (possibleDie.Gear <= connectedSpace.SpeedLimit)
+                            if (possibleDie.Gear < connectedSpace.SpeedLimit)
+                            {
+                                nextSpace = connectedSpace;
+                            }
+                            else if (possibleDie.Gear == connectedSpace.SpeedLimit)
                             {
                                 nextSpace = connectedSpace.GetConnectedSpaces().First();
                             }
