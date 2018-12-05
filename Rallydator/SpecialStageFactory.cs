@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 namespace Rallydator
 {
     public static class SpecialStageFactory
     {
-        public static SpecialStage Create(string courseLayout)
+        public static SpecialStage Create(string courseLayout, bool hasAssistance)
         {
             var sections = CreateSections(courseLayout).ToList();
             if (sections.Count > 1)
@@ -20,7 +19,7 @@ namespace Rallydator
                 lastSpace.AddConnectedSpace(goalSpace);
             }
 
-            return new SpecialStage(sections);
+            return new SpecialStage(sections, hasAssistance);
         }
 
         private static void MergeSections(List<CourseSection> sections)

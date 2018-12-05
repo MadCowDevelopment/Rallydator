@@ -2,9 +2,9 @@
 
 namespace Rallydator.Validation
 {
-    internal class RallyState
+    public class RallyState
     {
-        public RallyState(SpecialStage specialStage, RaceResult raceResult, Space currentSpace, Roll previousRoll, int currentRollIndex, Damage damage)
+        public RallyState(SpecialStage specialStage, SpecialStageRolls raceResult, Space currentSpace, Roll previousRoll, int currentRollIndex, Damage damage)
         {
             SpecialStage = specialStage;
             RaceResult = raceResult;
@@ -15,7 +15,7 @@ namespace Rallydator.Validation
         }
 
         public SpecialStage SpecialStage { get; }
-        public RaceResult RaceResult { get; }
+        public SpecialStageRolls RaceResult { get; }
         public Space CurrentSpace { get; }
         public Roll PreviousRoll { get; }
         public int CurrentRollIndex { get; }

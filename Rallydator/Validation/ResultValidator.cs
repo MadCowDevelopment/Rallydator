@@ -1,51 +1,51 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
 using Rallydator.AIMA;
 
 namespace Rallydator.Validation
 {
     public class ResultValidator
     {
-        private readonly SpecialStage _specialStage;
-        private readonly RaceResult _raceResult;
+        private readonly Rally _rally;
 
-        public ResultValidator(SpecialStage specialStage, RaceResult raceResult)
+        public ResultValidator(Rally rally)
         {
-            _specialStage = specialStage;
-            _raceResult = raceResult;
+            _rally = rally;
         }
 
-        public ValidationResult Validate()
+        public RallyValidationResult Validate()
         {
-            var result = ValidateSpecialStage();
-            return result;
+            var validationResults = new List<ValidationResult>();
+            ValidationResult previousResult = null;
+            SpecialStageResult previousSpecialStageResult = null;
+            foreach (var specialStageResult in _rally.SpecialStages)
+            {
+                previousResult = ValidateSpecialStage(specialStageResult, previousSpecialStageResult, previousResult);
+                validationResults.Add(previousResult);
+                previousSpecialStageResult = specialStageResult;
+            }
+
+            return new RallyValidationResult(validationResults);
         }
 
-        private ValidationResult ValidateSpecialStage()
+        private ValidationResult ValidateSpecialStage(SpecialStageResult specialStageResult, SpecialStageResult previousSpecialStageResult, ValidationResult previousValidationResult)
+        {
+            var damage = previousSpecialStageResult?.SpecialStage.HasAssistance == true || previousValidationResult == null
+                ? Damage.None
+                : previousValidationResult.Damage;
+
+            var initialState = new RallyState(specialStageResult.SpecialStage, specialStageResult.RaceResult, specialStageResult.SpecialStage.StartSpace, Roll.Start, 0, damage);
+            return SolveProblem(initialState);
+        }
+
+        private ValidationResult SolveProblem(RallyState initialState)
         {
             var actionFunction = new RallyActionFunction();
             var resultFunction = new RallyResultFunction();
             var goalTest = new RallyGoalTest();
             var stepCost = new RallyStepCost();
-
-            var initialState = new RallyState(_specialStage, _raceResult, _specialStage.StartSpace, Roll.Start, 0, Damage.None);
-            var searchAlgorithm = new GraphSearch<RallyState, RallyAction>();
-
-            return SolveProblem(actionFunction, resultFunction, goalTest, stepCost, initialState, searchAlgorithm);
-        }
-
-        private TResult SolveProblem<TState, TAction, TResult>(
-            ActionFunction<TState, TAction> actionFunction,
-            ResultFunction<TState, TAction> resultFunction,
-            GoalTest<TState> goalTest,
-            StepCost<TState, TAction> stepCost,
-            TState initialState,
-            IGraphSearch<TState, TAction, TResult> searchAlgorithm)
-        {
-            var problem = new Problem<TState, TAction>(
-                initialState, actionFunction, resultFunction, goalTest, stepCost);
-
-            var result = searchAlgorithm.Search(problem);
-            return result;
+            var searchAlgorithm = new GraphSearch<RallyAction>();
+            var problem = new Problem<RallyState, RallyAction>(initialState, actionFunction, resultFunction, goalTest, stepCost);
+            return searchAlgorithm.Search(problem);
         }
     }
 }

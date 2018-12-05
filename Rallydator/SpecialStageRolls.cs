@@ -4,9 +4,9 @@ using System.Linq;
 
 namespace Rallydator
 {
-    public class RaceResult
+    public class SpecialStageRolls
     {
-        public RaceResult(IEnumerable<Roll> rolls)
+        public SpecialStageRolls(IEnumerable<Roll> rolls)
         {
             Rolls = new ReadOnlyCollection<Roll>(rolls.ToList());
         }

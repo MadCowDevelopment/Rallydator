@@ -16,15 +16,15 @@ namespace Rallydator.AIMA
     ///     expand the chosen node, adding the resulting nodes to the frontier
     ///       only if not in the frontier or explored set
     /// </summary>
-    public class GraphSearch<TState, TAction> : IGraphSearch<TState, TAction, ValidationResult>
+    public class GraphSearch<TAction> : IGraphSearch<RallyState, TAction, ValidationResult>
     {
-        public ValidationResult Search(Problem<TState, TAction> problem)
+        public ValidationResult Search(Problem<RallyState, TAction> problem)
         {
             var result = new ValidationResult();
-            Queue<Node<TState, TAction>> frontier = new Queue<Node<TState, TAction>>();
-            HashSet<Node<TState, TAction>> explored = new HashSet<Node<TState, TAction>>();
+            Queue<Node<RallyState, TAction>> frontier = new Queue<Node<RallyState, TAction>>();
+            HashSet<Node<RallyState, TAction>> explored = new HashSet<Node<RallyState, TAction>>();
 
-            var root = new Node<TState, TAction>(problem.InitalState);
+            var root = new Node<RallyState, TAction>(problem.InitalState);
             frontier.Enqueue(root);
 
             for (; ; )
@@ -38,6 +38,7 @@ namespace Rallydator.AIMA
                 var leaf = frontier.Dequeue();
                 if (problem.GoalTest.IsGoal(leaf.State))
                 {
+                    result.Damage = leaf.State.Damage;
                     break;
                 }
 
@@ -46,7 +47,7 @@ namespace Rallydator.AIMA
                 var children = ExpandNode(leaf, problem);
                 foreach (var child in children)
                 {
-                    Node<TState, TAction> child1 = child;
+                    Node<RallyState, TAction> child1 = child;
                     if (!frontier.Any(p => p.State.Equals(child1.State)) &&
                         !explored.Any(p => p.State.Equals(child1.State)))
                     {
@@ -58,16 +59,16 @@ namespace Rallydator.AIMA
             return result;
         }
 
-        public List<Node<TState, TAction>> ExpandNode(Node<TState, TAction> node, Problem<TState, TAction> problem)
+        public List<Node<RallyState, TAction>> ExpandNode(Node<RallyState, TAction> node, Problem<RallyState, TAction> problem)
         {
-            var childNodes = new List<Node<TState, TAction>>();
+            var childNodes = new List<Node<RallyState, TAction>>();
 
             var actions = problem.ActionFunction.Actions(node.State);
             foreach (var action in actions)
             {
                 var state = problem.ResultFunction.Result(node.State, action);
                 var cost = problem.StepCost.Cost(node.State, action);
-                var childNode = new Node<TState, TAction>(state, node, action, cost);
+                var childNode = new Node<RallyState, TAction>(state, node, action, cost);
                 childNodes.Add(childNode);
             }
 

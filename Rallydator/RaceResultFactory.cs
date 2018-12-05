@@ -4,7 +4,7 @@ namespace Rallydator
 {
     public class RaceResultFactory
     {
-        public static RaceResult Create(string result)
+        public static SpecialStageRolls Create(string result)
         {
             var rolls = new List<Roll>();
 
@@ -13,7 +13,7 @@ namespace Rallydator
                 rolls.Add(Roll.Parse(roll));
             }
 
-            return new RaceResult(rolls);
+            return new SpecialStageRolls(rolls);
         }
     }
 }

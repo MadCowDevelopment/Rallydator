@@ -5,8 +5,9 @@ namespace Rallydator
 {
     public class SpecialStage
     {
-        public SpecialStage(IEnumerable<CourseSection> sections)
+        public SpecialStage(IEnumerable<CourseSection> sections, bool hasAssistance)
         {
+            HasAssistance = hasAssistance;
             Sections = sections.ToList();
 
             StartSpace = new Space(Surface.Asphalt, int.MaxValue, false, "Start");
@@ -18,5 +19,7 @@ namespace Rallydator
 
         public IEnumerable<CourseSection> Sections { get; }
         public Space StartSpace { get; }
+
+        public bool HasAssistance { get; }
     }
 }
