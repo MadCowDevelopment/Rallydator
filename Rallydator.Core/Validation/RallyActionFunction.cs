@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Rallydator.Core.AIMA;
 using Rallydator.Core.Utils;
@@ -7,8 +9,15 @@ namespace Rallydator.Core.Validation
 {
     internal class RallyActionFunction : ActionFunction<RallyState, RallyAction>
     {
+        private static int HighestRollIndex = 0;
         public override List<RallyAction> Actions(RallyState state)
         {
+            if (state.CurrentRollIndex > HighestRollIndex)
+            {
+                HighestRollIndex = state.CurrentRollIndex;
+                Debug.WriteLine($"Highest roll index: {HighestRollIndex}");
+            }
+
             var possibleActions = new List<RallyAction>();
             if (state.CurrentRoll == null) return possibleActions;
 
@@ -64,7 +73,6 @@ namespace Rallydator.Core.Validation
                         else
                         {
                             if (possibleDie.Gear > connectedSpace.SpeedLimit) continue;
-
                         }
 
                         CalculateTargetSpacesRec(targetSpaces, nextSpace, diceSequence.AddDie(possibleDie), depth+1);
