@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -116,7 +115,16 @@ namespace Rallydator.Core.Test
 
             ExecuteTest(true);
         }
+        
+        [Fact]
+        public void No_time_attack()
+        {
+            SS1Tire = TireType.Asphalt;
+            SS1Description = "C0-C9"; // 5 Spaces
+            SS1Result = "3"; // 1,2,3,A,A
 
+            ExecuteTest(true);
+        }
 
         [Fact]
         public void Real_world_example_2018_October()
@@ -144,7 +152,7 @@ namespace Rallydator.Core.Test
                 }
             }
 
-            Assert.Empty(errors);
+            AssertErrors(errors);
         }
 
         [Fact]
@@ -177,6 +185,16 @@ namespace Rallydator.Core.Test
                     errors.Add(error);
                     Debug.WriteLine(error);
                 }
+            }
+
+            AssertErrors(errors);
+        }
+
+        private static void AssertErrors(List<string> errors)
+        {
+            foreach (var error in errors)
+            {
+                Debug.WriteLine(error);
             }
 
             Assert.Empty(errors);

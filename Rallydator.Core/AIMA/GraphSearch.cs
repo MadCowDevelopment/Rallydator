@@ -21,11 +21,11 @@ namespace Rallydator.Core.AIMA
         public ValidationResult Search(Problem<RallyState, TAction> problem)
         {
             var result = new ValidationResult();
-            Queue<Node<RallyState, TAction>> frontier = new Queue<Node<RallyState, TAction>>();
+            Stack<Node<RallyState, TAction>> frontier = new Stack<Node<RallyState, TAction>>();
             HashSet<Node<RallyState, TAction>> explored = new HashSet<Node<RallyState, TAction>>();
 
             var root = new Node<RallyState, TAction>(problem.InitalState);
-            frontier.Enqueue(root);
+            frontier.Push(root);
 
             for (; ; )
             {
@@ -35,7 +35,7 @@ namespace Rallydator.Core.AIMA
                     break;
                 }
 
-                var leaf = frontier.Dequeue();
+                var leaf = frontier.Pop();
                 if (problem.GoalTest.IsGoal(leaf.State))
                 {
                     result.Damage = leaf.State.Damage;
@@ -51,7 +51,7 @@ namespace Rallydator.Core.AIMA
                     if (!frontier.Any(p => p.State.Equals(child1.State)) &&
                         !explored.Any(p => p.State.Equals(child1.State)))
                     {
-                        frontier.Enqueue(child);
+                        frontier.Push(child);
                     }
                 }
             }

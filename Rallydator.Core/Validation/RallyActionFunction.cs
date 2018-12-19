@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using Rallydator.Core.AIMA;
 using Rallydator.Core.Utils;
@@ -17,16 +16,6 @@ namespace Rallydator.Core.Validation
             foreach (var possibleTargetSpace in possibleTargetSpaces)
             {
                 possibleActions.Add(new RallyAction(possibleTargetSpace, state.CurrentRoll));
-            }
-
-            if (state.CurrentSpace.ToString().StartsWith("C3.22") && state.CurrentRoll.TimeAttack == 3)
-            {
-                Debug.WriteLine("");
-            }
-
-            if (!possibleTargetSpaces.Any())
-            {
-                Debug.WriteLine("");
             }
 
             return possibleActions;

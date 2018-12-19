@@ -13,7 +13,7 @@ namespace Rallydator.Core
                 MergeSections(sections);
             }
 
-            var goalSpace = new Space(Surface.Asphalt, int.MaxValue, false, "Finish");
+            var goalSpace = new Space(Surface.Asphalt, int.MaxValue, false, false, "Finish");
             foreach (var lastSpace in sections.Last().LastSpaces)
             {
                 lastSpace.AddConnectedSpace(goalSpace);

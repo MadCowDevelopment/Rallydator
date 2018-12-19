@@ -6,6 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Rallydator.Core.Test\Rallydator.Core.Test.csproj" />
     <ProjectReference Include="..\Rallydator.Core\Rallydator.Core.csproj" />
   </ItemGroup>
 

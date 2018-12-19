@@ -52,8 +52,9 @@ namespace Rallydator.Core
                         var surface = GetSurface(singleSpace);
                         var speedLimit = GetSpeedLimit(singleSpace);
                         var isJump = GetIsJump(singleSpace);
-                        var driftIdentifier = j == 0 ? string.Empty : $".{k+1}";
-                        var space = new Space(surface, speedLimit, isJump, $"{zoneIdentifier}.{spaceIdentifier}{driftIdentifier}");
+                        var isDrift = j != 0;
+                        var driftIdentifier = isDrift ? $".{k+1}" : string.Empty;
+                        var space = new Space(surface, speedLimit, isJump, isDrift, $"{zoneIdentifier}.{spaceIdentifier}{driftIdentifier}");
                         
                         if (i == 0 && k == 0) startSpaces.Add(space);
                         if (k == 0) currentSpaces.Add(space);

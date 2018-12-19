@@ -10,7 +10,7 @@ namespace Rallydator.Core
             HasAssistance = hasAssistance;
             Sections = sections.ToList();
 
-            StartSpace = new Space(Surface.Asphalt, int.MaxValue, false, "Start");
+            StartSpace = new Space(Surface.Asphalt, int.MaxValue, false, false, "Start");
             foreach (var firstSpace in Sections.First().FirstSpaces)
             {
                 StartSpace.AddConnectedSpace(firstSpace);
